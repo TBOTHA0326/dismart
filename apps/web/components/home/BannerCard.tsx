@@ -16,7 +16,7 @@ export default function BannerCard({ banner }: BannerCardProps) {
 
   const inner = (
     <div
-      className="relative w-full h-44 sm:h-56 md:h-64 rounded-2xl overflow-hidden flex items-center"
+      className="relative flex h-44 w-full items-center overflow-hidden rounded-lg sm:h-56 md:h-64"
       style={{ backgroundColor: banner.bg_color }}
     >
       <Image
@@ -35,8 +35,8 @@ export default function BannerCard({ banner }: BannerCardProps) {
           <p className="text-white/80 text-sm sm:text-base mt-2">{banner.subtext}</p>
         )}
         {href && (
-          <span className="inline-block mt-4 bg-brand-yellow text-brand-navy font-bold px-5 py-2 rounded-lg text-sm hover:bg-brand-yellow-dark transition-colors">
-            Shop Now
+          <span className="inline-block mt-4 rounded-lg bg-brand-yellow px-5 py-2 text-sm font-bold text-brand-navy transition-colors hover:bg-brand-yellow-dark">
+            View Deals
           </span>
         )}
       </div>

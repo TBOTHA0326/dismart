@@ -8,21 +8,17 @@ interface WhatsAppCTABannerProps {
 
 export default function WhatsAppCTABanner({ branch }: WhatsAppCTABannerProps) {
   return (
-    <section className="bg-brand-navy py-12">
+    <section className="bg-brand-navy py-6">
       <div className="mx-auto max-w-7xl px-4">
-        <div className="flex flex-col items-center justify-between gap-6 text-center md:flex-row md:text-left">
+        <div className="flex items-center justify-between gap-4">
           <div>
-            <h2 className="text-2xl font-black text-white md:text-3xl">
-              Got a question? Chat to us on WhatsApp
-            </h2>
-            <p className="mt-2 text-base text-white/70">
-              {branch.name} branch &mdash; {branch.whatsapp_number}
-            </p>
+            <p className="text-sm font-black text-white">Got a question?</p>
+            <p className="text-xs text-white/60">{branch.name} &mdash; {branch.whatsapp_number}</p>
           </div>
           <WhatsAppButton
             href={buildGeneralWhatsAppLink(branch)}
             label="Chat Now"
-            size="lg"
+            size="sm"
           />
         </div>
       </div>

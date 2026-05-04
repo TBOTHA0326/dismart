@@ -1,4 +1,4 @@
-import type { Branch, Category, Product, Banner } from "@dismart/shared";
+import type { Banner, Branch, Category, DealPamphlet, Product } from "@dismart/shared";
 
 export const BRANCHES: Branch[] = [
   {
@@ -37,20 +37,20 @@ export const BRANCHES: Branch[] = [
 ];
 
 export const CATEGORIES: Category[] = [
-  { id: "cat-groceries", name: "Groceries", icon_emoji: "🛒", sort_order: 1 },
-  { id: "cat-household", name: "Household", icon_emoji: "🏠", sort_order: 2 },
-  { id: "cat-cleaning", name: "Cleaning", icon_emoji: "🧹", sort_order: 3 },
-  { id: "cat-personal-care", name: "Personal Care", icon_emoji: "🧴", sort_order: 4 },
-  { id: "cat-toiletries", name: "Toiletries", icon_emoji: "🪥", sort_order: 5 },
-  { id: "cat-baby", name: "Baby & Toddler", icon_emoji: "👶", sort_order: 6 },
-  { id: "cat-confectionery", name: "Confectionery", icon_emoji: "🍬", sort_order: 7 },
-  { id: "cat-beverages", name: "Beverages", icon_emoji: "🥤", sort_order: 8 },
-  { id: "cat-electronics", name: "Electronics", icon_emoji: "📱", sort_order: 9 },
-  { id: "cat-appliances", name: "Appliances", icon_emoji: "🔌", sort_order: 10 },
-  { id: "cat-clothing", name: "Clothing", icon_emoji: "👕", sort_order: 11 },
-  { id: "cat-toys", name: "Toys", icon_emoji: "🧸", sort_order: 12 },
-  { id: "cat-hardware", name: "Hardware", icon_emoji: "🔧", sort_order: 13 },
-  { id: "cat-stationery", name: "Stationery", icon_emoji: "✏️", sort_order: 14 },
+  { id: "cat-groceries", name: "Groceries", icon_name: "ShoppingBasket", sort_order: 1 },
+  { id: "cat-household", name: "Household", icon_name: "Home", sort_order: 2 },
+  { id: "cat-cleaning", name: "Cleaning", icon_name: "Sparkles", sort_order: 3 },
+  { id: "cat-personal-care", name: "Personal Care", icon_name: "HeartPulse", sort_order: 4 },
+  { id: "cat-toiletries", name: "Toiletries", icon_name: "Bath", sort_order: 5 },
+  { id: "cat-baby", name: "Baby & Toddler", icon_name: "Baby", sort_order: 6 },
+  { id: "cat-confectionery", name: "Confectionery", icon_name: "Cookie", sort_order: 7 },
+  { id: "cat-beverages", name: "Beverages", icon_name: "Coffee", sort_order: 8 },
+  { id: "cat-electronics", name: "Electronics", icon_name: "Smartphone", sort_order: 9 },
+  { id: "cat-appliances", name: "Appliances", icon_name: "Plug", sort_order: 10 },
+  { id: "cat-clothing", name: "Clothing", icon_name: "Shirt", sort_order: 11 },
+  { id: "cat-toys", name: "Toys", icon_name: "Gamepad2", sort_order: 12 },
+  { id: "cat-hardware", name: "Hardware", icon_name: "Wrench", sort_order: 13 },
+  { id: "cat-stationery", name: "Stationery", icon_name: "Pencil", sort_order: 14 },
 ];
 
 export const PRODUCTS: Product[] = [
@@ -361,7 +361,7 @@ export const BANNERS: Banner[] = [
     branch_id: "branch-meyerton",
     image_url: "https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=1200&h=400&fit=crop",
     headline: "MASSIVE SAVINGS THIS WEEK",
-    subtext: "New stock just landed — grab it before it's gone!",
+    subtext: "New stock just landed. Grab it before it's gone!",
     link_type: "none",
     link_id: null,
     is_active: true,
@@ -406,6 +406,37 @@ export const BANNERS: Banner[] = [
   },
 ];
 
+export const DEAL_PAMPHLETS: DealPamphlet[] = [
+  {
+    id: "deal-meyerton-weekly",
+    branch_id: "branch-meyerton",
+    title: "Weekly Savings Pamphlet",
+    description: "Browse this week's featured deals before visiting store.",
+    asset_url: "https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=1400&h=900&fit=crop",
+    asset_type: "image",
+    source: "image_url",
+    thumbnail_url: "https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=800&h=500&fit=crop",
+    is_active: true,
+    starts_at: "2026-05-04T00:00:00Z",
+    ends_at: null,
+    sort_order: 1,
+  },
+  {
+    id: "deal-meyerton-facebook",
+    branch_id: "branch-meyerton",
+    title: "Facebook Deals Post",
+    description: "Open the latest social post with in-store specials.",
+    asset_url: "https://www.facebook.com/Dismart",
+    asset_type: "external_url",
+    source: "facebook_url",
+    thumbnail_url: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800&h=500&fit=crop",
+    is_active: true,
+    starts_at: null,
+    ends_at: null,
+    sort_order: 2,
+  },
+];
+
 export function getProductsByBranch(branchId: string): Product[] {
   return PRODUCTS.filter((p) => p.branch_ids.includes(branchId));
 }
@@ -426,6 +457,12 @@ export function getBannersByBranch(branchId: string): Banner[] {
   );
 }
 
+export function getDealsByBranch(branchId: string): DealPamphlet[] {
+  return DEAL_PAMPHLETS.filter((deal) => deal.branch_id === branchId && deal.is_active).sort(
+    (a, b) => a.sort_order - b.sort_order
+  );
+}
+
 export function getProductById(id: string): Product | undefined {
   return PRODUCTS.find((p) => p.id === id);
 }
@@ -437,3 +474,4 @@ export function getCategoryById(id: string): Category | undefined {
 export function getBranchById(id: string): Branch | undefined {
   return BRANCHES.find((b) => b.id === id);
 }
+

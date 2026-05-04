@@ -1,13 +1,13 @@
 "use client";
 
 import { useState, useCallback } from "react";
-import { use } from "react";
 import Link from "next/link";
 import type { Branch } from "@dismart/shared";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import StickyWhatsApp from "@/components/layout/StickyWhatsApp";
 import ProductGrid from "@/components/product/ProductGrid";
+import CategoryIcon from "@/components/ui/CategoryIcon";
 import {
   CATEGORIES,
   getCategoryById,
@@ -15,11 +15,11 @@ import {
 } from "@/lib/mock-data";
 
 interface PageProps {
-  params: Promise<{ id: string }>;
+  params: { id: string };
 }
 
 export default function CategoryPage({ params }: PageProps) {
-  const { id } = use(params);
+  const { id } = params;
   const [branch, setBranch] = useState<Branch | null>(null);
 
   const handleBranchChange = useCallback((b: Branch) => {
@@ -38,14 +38,14 @@ export default function CategoryPage({ params }: PageProps) {
             <Link href="/" className="hover:text-brand-navy transition-colors">Home</Link>
             <span>/</span>
             <span className="text-brand-navy font-semibold">
-              {category ? `${category.icon_emoji} ${category.name}` : "Category"}
+              {category ? category.name : "Category"}
             </span>
           </nav>
 
           {category && (
             <div className="mb-6">
               <h1 className="text-2xl md:text-3xl font-black text-brand-navy uppercase tracking-wide">
-                {category.icon_emoji} {category.name}
+                {category.name}
               </h1>
               {branch && (
                 <p className="text-gray-500 text-sm mt-1">
@@ -71,7 +71,7 @@ export default function CategoryPage({ params }: PageProps) {
                         : "text-gray-600 hover:bg-gray-100 hover:text-brand-navy"
                     }`}
                   >
-                    <span>{cat.icon_emoji}</span>
+                    <CategoryIcon name={cat.icon_name} className="h-4 w-4" />
                     <span>{cat.name}</span>
                   </Link>
                 ))}

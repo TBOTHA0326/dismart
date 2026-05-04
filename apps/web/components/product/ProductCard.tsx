@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import type { Product, Branch } from "@dismart/shared";
+import { formatCurrency, type Product, type Branch } from "@dismart/shared";
 import Badge from "@/components/ui/Badge";
 import WhatsAppButton from "@/components/ui/WhatsAppButton";
 import { buildWhatsAppLink } from "@/lib/whatsapp";
@@ -12,7 +12,7 @@ interface ProductCardProps {
 
 export default function ProductCard({ product, branch }: ProductCardProps) {
   return (
-    <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden flex flex-col hover:shadow-md transition-shadow">
+    <div className="flex h-full flex-col overflow-hidden rounded-lg border border-gray-100 bg-white shadow-sm transition-shadow hover:shadow-md">
       <Link href={`/product/${product.id}`} className="relative block aspect-square bg-gray-50 overflow-hidden">
         <Image
           src={product.image_url}
@@ -39,8 +39,8 @@ export default function ProductCard({ product, branch }: ProductCardProps) {
             {product.name}
           </h3>
         </Link>
-        <p className="text-xl font-black text-brand-navy mt-auto">
-          R{product.price.toFixed(2)}
+        <p className="mt-auto text-xl font-black text-brand-navy">
+          {formatCurrency(product.price)}
         </p>
         <WhatsAppButton
           href={buildWhatsAppLink(branch, product)}

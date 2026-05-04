@@ -4,8 +4,12 @@
   "private": true,
   "scripts": {
     "dev": "pnpm --filter web dev",
-    "build": "pnpm --filter web build",
-    "lint": "pnpm --filter web lint"
+    "dev:web": "pnpm --filter web dev",
+    "dev:admin": "pnpm --filter admin dev",
+    "build": "pnpm --filter web build && pnpm --filter admin build",
+    "build:web": "pnpm --filter web build",
+    "build:admin": "pnpm --filter admin build",
+    "lint": "pnpm --filter web lint && pnpm --filter admin lint"
   },
   "devDependencies": {
     "typescript": "^5"

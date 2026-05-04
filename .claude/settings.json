@@ -21,7 +21,12 @@
       "PowerShell(npm install -g pnpm 2>&1)",
       "PowerShell(tail -5)",
       "PowerShell(npm install -g pnpm)",
-      "PowerShell(pnpm --version)"
+      "PowerShell(pnpm --version)",
+      "Bash(where node:*)",
+      "Bash(npm --version)",
+      "Bash(pnpm build *)",
+      "Bash(ipconfig)",
+      "Bash(findstr /i \"IPv4\")"
     ],
     "additionalDirectories": [
       "c:\\Personal Projects\\Tiaan\\dismart\\apps\\web\\app\\category",

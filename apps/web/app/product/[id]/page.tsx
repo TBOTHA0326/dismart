@@ -1,9 +1,9 @@
 "use client";
 
-import { useState, useCallback } from "react";
-import { use } from "react";
+import { useCallback, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { AlertTriangle } from "lucide-react";
 import type { Branch } from "@dismart/shared";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
@@ -12,18 +12,18 @@ import Badge from "@/components/ui/Badge";
 import WhatsAppButton from "@/components/ui/WhatsAppButton";
 import ProductRow from "@/components/home/ProductRow";
 import {
-  getProductById,
   getCategoryById,
+  getProductById,
   getProductsByCategory,
 } from "@/lib/mock-data";
 import { buildWhatsAppLink } from "@/lib/whatsapp";
 
 interface PageProps {
-  params: Promise<{ id: string }>;
+  params: { id: string };
 }
 
 export default function ProductPage({ params }: PageProps) {
-  const { id } = use(params);
+  const { id } = params;
   const [branch, setBranch] = useState<Branch | null>(null);
 
   const handleBranchChange = useCallback((b: Branch) => {
@@ -32,19 +32,22 @@ export default function ProductPage({ params }: PageProps) {
 
   const product = getProductById(id);
   const category = product ? getCategoryById(product.category_id) : null;
-  const related = branch && product
-    ? getProductsByCategory(branch.id, product.category_id)
-        .filter((p) => p.id !== product.id)
-        .slice(0, 8)
-    : [];
+  const related =
+    branch && product
+      ? getProductsByCategory(branch.id, product.category_id)
+          .filter((p) => p.id !== product.id)
+          .slice(0, 8)
+      : [];
 
   return (
     <>
       <Header onBranchChange={handleBranchChange} activeBranch={branch} />
       <main className="min-h-screen bg-gray-50 pb-24 md:pb-0">
-        <div className="max-w-7xl mx-auto px-4 py-6">
-          <nav className="flex items-center gap-2 text-sm text-gray-500 mb-6 flex-wrap">
-            <Link href="/" className="hover:text-brand-navy transition-colors">Home</Link>
+        <div className="mx-auto max-w-7xl px-4 py-6">
+          <nav className="mb-6 flex flex-wrap items-center gap-2 text-sm text-gray-500">
+            <Link href="/" className="hover:text-brand-navy transition-colors">
+              Home
+            </Link>
             <span>/</span>
             {category && (
               <>
@@ -57,18 +60,18 @@ export default function ProductPage({ params }: PageProps) {
                 <span>/</span>
               </>
             )}
-            <span className="text-brand-navy font-semibold line-clamp-1">
+            <span className="line-clamp-1 font-semibold text-brand-navy">
               {product?.name ?? "Product"}
             </span>
           </nav>
 
           {!product ? (
-            <p className="text-gray-500 text-center py-20">Product not found.</p>
+            <p className="py-20 text-center text-gray-500">Product not found.</p>
           ) : (
             <>
-              <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+              <div className="overflow-hidden rounded-xl border border-gray-100 bg-white shadow-sm">
                 <div className="flex flex-col md:flex-row">
-                  <div className="relative aspect-square md:w-96 md:flex-shrink-0 bg-gray-50">
+                  <div className="relative aspect-square bg-gray-50 md:w-96 md:flex-shrink-0">
                     <Image
                       src={product.image_url}
                       alt={product.name}
@@ -78,25 +81,25 @@ export default function ProductPage({ params }: PageProps) {
                       priority
                     />
                     {product.is_special && (
-                      <div className="absolute top-3 left-3">
+                      <div className="absolute left-3 top-3">
                         <Badge variant="special" />
                       </div>
                     )}
                   </div>
 
-                  <div className="p-6 md:p-8 flex flex-col gap-4 flex-1">
+                  <div className="flex flex-1 flex-col gap-4 p-6 md:p-8">
                     {category && (
                       <Link
                         href={`/category/${category.id}`}
-                        className="text-xs font-bold text-brand-red uppercase tracking-widest hover:underline"
+                        className="text-xs font-bold uppercase tracking-widest text-brand-red hover:underline"
                       >
-                        {category.icon_emoji} {category.name}
+                        {category.name}
                       </Link>
                     )}
-                    <h1 className="text-2xl md:text-3xl font-black text-brand-navy leading-tight">
+                    <h1 className="text-2xl font-black leading-tight text-brand-navy md:text-3xl">
                       {product.name}
                     </h1>
-                    <p className="text-gray-600 text-sm leading-relaxed">
+                    <p className="text-sm leading-relaxed text-gray-600">
                       {product.description}
                     </p>
                     <p className="text-4xl font-black text-brand-navy">
@@ -104,12 +107,13 @@ export default function ProductPage({ params }: PageProps) {
                     </p>
 
                     {product.stock_status === "low_stock" && (
-                      <p className="text-orange-600 text-sm font-semibold">
-                        &#9888; Low stock — enquire quickly!
+                      <p className="flex items-center gap-2 text-sm font-semibold text-orange-600">
+                        <AlertTriangle className="h-4 w-4" aria-hidden="true" />
+                        Low stock. Enquire quickly.
                       </p>
                     )}
                     {product.stock_status === "out_of_stock" && (
-                      <p className="text-brand-red text-sm font-semibold">
+                      <p className="text-sm font-semibold text-brand-red">
                         Out of stock at this branch
                       </p>
                     )}
@@ -122,15 +126,16 @@ export default function ProductPage({ params }: PageProps) {
                           size="lg"
                           fullWidth
                         />
-                        <p className="text-xs text-gray-400 text-center mt-2">
-                          No purchase required — just ask!
+                        <p className="mt-2 text-center text-xs text-gray-400">
+                          No purchase required. Just ask.
                         </p>
                       </div>
                     )}
 
                     {product.expiry_date && (
-                      <p className="text-xs text-gray-400 border-t border-gray-100 pt-3">
-                        Best before: {new Date(product.expiry_date).toLocaleDateString("en-ZA")}
+                      <p className="border-t border-gray-100 pt-3 text-xs text-gray-400">
+                        Best before:{" "}
+                        {new Date(product.expiry_date).toLocaleDateString("en-ZA")}
                       </p>
                     )}
                   </div>
