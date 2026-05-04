@@ -1,29 +1,71 @@
+"use client";
+
+import { useRef } from "react";
 import Link from "next/link";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import type { Category } from "@dismart/shared";
+import CategoryIcon from "@/components/ui/CategoryIcon";
 
 interface CategoryStripProps {
   categories: Category[];
 }
 
 export default function CategoryStrip({ categories }: CategoryStripProps) {
+  const scrollerRef = useRef<HTMLDivElement>(null);
+
+  function scrollRail(direction: "left" | "right") {
+    scrollerRef.current?.scrollBy({
+      left: direction === "left" ? -420 : 420,
+      behavior: "smooth",
+    });
+  }
+
   return (
-    <section className="bg-white border-b border-gray-100 py-4">
-      <div className="max-w-7xl mx-auto px-4">
-        <div className="flex gap-4 overflow-x-auto scrollbar-hide pb-1">
-          {categories.map((cat) => (
-            <Link
-              key={cat.id}
-              href={`/category/${cat.id}`}
-              className="flex flex-col items-center gap-2 flex-shrink-0 group"
-            >
-              <div className="w-16 h-16 rounded-full bg-brand-yellow/10 border-2 border-brand-yellow/20 group-hover:border-brand-yellow group-hover:bg-brand-yellow/20 transition-all flex items-center justify-center text-3xl">
-                {cat.icon_emoji}
-              </div>
-              <span className="text-xs font-semibold text-gray-700 group-hover:text-brand-navy text-center w-16 leading-tight line-clamp-2 transition-colors">
-                {cat.name}
-              </span>
-            </Link>
-          ))}
+    <section className="border-b border-gray-100 bg-white py-4">
+      <div className="mx-auto max-w-7xl px-4">
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={() => scrollRail("left")}
+            className="hidden h-10 w-10 flex-shrink-0 items-center justify-center rounded-full border border-gray-200 bg-white text-brand-navy shadow-md transition hover:border-brand-yellow md:flex"
+            aria-label="Scroll categories left"
+          >
+            <ChevronLeft className="h-5 w-5" aria-hidden="true" />
+          </button>
+          <div
+            ref={scrollerRef}
+            onWheel={(event) => {
+              if (Math.abs(event.deltaY) > Math.abs(event.deltaX)) {
+                event.currentTarget.scrollLeft += event.deltaY;
+              }
+            }}
+            className="flex-1 overflow-x-auto pb-2 scroll-smooth"
+          >
+            <div className="mx-auto flex w-max min-w-full justify-start gap-4 md:justify-center md:gap-5">
+              {categories.map((cat) => (
+                <Link
+                  key={cat.id}
+                  href={`/category/${cat.id}`}
+                  className="group flex w-24 flex-shrink-0 flex-col items-center gap-2"
+                >
+                  <div className="flex h-16 w-16 items-center justify-center rounded-full border border-brand-yellow/40 bg-brand-yellow/15 text-brand-navy transition-all group-hover:border-brand-yellow group-hover:bg-brand-yellow/30 group-hover:text-brand-red">
+                    <CategoryIcon name={cat.icon_name} className="h-7 w-7" />
+                  </div>
+                  <span className="w-full text-center text-xs font-semibold leading-tight text-gray-700 transition-colors line-clamp-2 group-hover:text-brand-navy">
+                    {cat.name}
+                  </span>
+                </Link>
+              ))}
+            </div>
+          </div>
+          <button
+            type="button"
+            onClick={() => scrollRail("right")}
+            className="hidden h-10 w-10 flex-shrink-0 items-center justify-center rounded-full border border-gray-200 bg-white text-brand-navy shadow-md transition hover:border-brand-yellow md:flex"
+            aria-label="Scroll categories right"
+          >
+            <ChevronRight className="h-5 w-5" aria-hidden="true" />
+          </button>
         </div>
       </div>
     </section>

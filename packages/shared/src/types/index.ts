@@ -13,7 +13,8 @@ export interface Branch {
 export interface Category {
   id: string;
   name: string;
-  icon_emoji: string;
+  icon_name: string;
+  icon_url?: string | null;
   sort_order: number;
 }
 
@@ -42,4 +43,34 @@ export interface Banner {
   is_active: boolean;
   sort_order: number;
   bg_color: string;
+}
+
+export interface DealPamphlet {
+  id: string;
+  branch_id: string;
+  title: string;
+  description: string | null;
+  asset_url: string;
+  asset_type: "image" | "pdf" | "external_url";
+  source: "upload" | "image_url" | "facebook_url" | "other_url";
+  thumbnail_url: string | null;
+  is_active: boolean;
+  starts_at: string | null;
+  ends_at: string | null;
+  sort_order: number;
+}
+
+export interface Profile {
+  id: string;
+  full_name: string;
+  role: "super_admin" | "admin" | "branch_manager";
+  branch_id: string | null;
+}
+
+export interface Enquiry {
+  id: string;
+  product_id: string;
+  branch_id: string;
+  created_at: string;
+  source: "whatsapp" | "web";
 }

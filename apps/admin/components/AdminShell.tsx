@@ -1,0 +1,73 @@
+import Link from "next/link";
+import {
+  BadgePercent,
+  Boxes,
+  Building2,
+  FileText,
+  LayoutDashboard,
+  Menu,
+  Tags,
+  Users,
+} from "lucide-react";
+import { profiles } from "@/lib/data";
+
+// Temporary: simulate active user role from mock data
+// Replace with real session check when Supabase Auth is connected
+const activeProfile = profiles[0];
+const isBranchManager = activeProfile.role === "branch_manager";
+
+// `hiddenFromBranchManager` flags items branch managers should not see.
+// Both admin and super_admin see all items.
+// When real auth is wired, move this filtering inside the component using a session hook.
+const allNavItems = [
+  { href: "/", label: "Dashboard", icon: LayoutDashboard },
+  { href: "/products", label: "Products", icon: Boxes },
+  { href: "/categories", label: "Categories", icon: Tags },
+  { href: "/banners", label: "Banners", icon: BadgePercent },
+  { href: "/deals", label: "Deals", icon: FileText },
+  { href: "/branches", label: "Branches", icon: Building2, hiddenFromBranchManager: true },
+  { href: "/users", label: "Users", icon: Users },
+];
+
+const navItems = isBranchManager
+  ? allNavItems.filter((item) => !item.hiddenFromBranchManager)
+  : allNavItems;
+
+export default function AdminShell({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="min-h-screen bg-gray-50">
+      <header className="sticky top-0 z-40 border-b border-gray-200 bg-white">
+        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4">
+          <Link href="/" className="text-2xl font-black tracking-tight">
+            <span className="text-brand-navy">DIS</span>
+            <span className="text-brand-red">MART</span>
+            <span className="ml-2 text-sm font-bold text-gray-400">CMS</span>
+          </Link>
+          <button className="inline-flex h-11 w-11 items-center justify-center rounded-lg border border-gray-200 text-brand-navy md:hidden">
+            <Menu className="h-5 w-5" aria-hidden="true" />
+            <span className="sr-only">Open navigation</span>
+          </button>
+        </div>
+      </header>
+
+      <div className="mx-auto grid max-w-7xl gap-6 px-4 py-6 md:grid-cols-[220px_1fr]">
+        <aside className="hidden md:block">
+          <nav className="sticky top-24 space-y-1">
+            {navItems.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className="flex min-h-11 items-center gap-3 rounded-lg px-3 text-sm font-bold text-gray-600 transition hover:bg-white hover:text-brand-navy hover:shadow-sm"
+              >
+                <item.icon className="h-4 w-4" aria-hidden="true" />
+                {item.label}
+              </Link>
+            ))}
+          </nav>
+        </aside>
+
+        <main>{children}</main>
+      </div>
+    </div>
+  );
+}
