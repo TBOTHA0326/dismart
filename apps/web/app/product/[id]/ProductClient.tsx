@@ -143,7 +143,7 @@ export default function ProductClient({ product, category, branches }: Props) {
         </div>
       </main>
       <Footer branch={branch} />
-      <StickyWhatsApp branch={branch} />
+      <StickyWhatsApp branch={branch} hidden={reserveOpen} />
       {branch && <ReserveModal open={reserveOpen} onClose={() => setReserveOpen(false)} product={product} branch={branch} />}
     </>
   );

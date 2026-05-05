@@ -98,7 +98,7 @@ export default function Header({
           </label>
         )}
 
-        <div className="relative justify-self-start md:justify-self-end" ref={dropdownRef}>
+        <div className="relative justify-self-end md:justify-self-end" ref={dropdownRef}>
           <button
             onClick={() => setDropdownOpen((o) => !o)}
             className="flex h-11 items-center gap-2 rounded-lg bg-white/35 px-3 text-sm font-semibold text-brand-navy transition-colors hover:bg-white/55 active:bg-white/70"

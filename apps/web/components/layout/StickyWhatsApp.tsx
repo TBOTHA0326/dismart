@@ -4,13 +4,14 @@ import { buildGeneralWhatsAppLink } from "@/lib/whatsapp";
 
 interface StickyWhatsAppProps {
   branch: Branch | null;
+  hidden?: boolean;
 }
 
-export default function StickyWhatsApp({ branch }: StickyWhatsAppProps) {
-  if (!branch) return null;
+export default function StickyWhatsApp({ branch, hidden }: StickyWhatsAppProps) {
+  if (!branch || hidden) return null;
 
   return (
-    <div className="fixed bottom-4 right-4 z-50 md:hidden">
+    <div className="fixed bottom-4 right-4 z-40 md:hidden">
       <a
         href={buildGeneralWhatsAppLink(branch)}
         target="_blank"

@@ -121,7 +121,7 @@ export default function ReserveModal({ open, onClose, product, branch }: Props) 
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-5 px-4 py-5 sm:px-6">
+        <form onSubmit={handleSubmit} className="space-y-5 px-4 py-5 pb-8 sm:px-6">
 
           {/* Stock + quantity */}
           <div className="rounded-lg border border-gray-100 bg-gray-50 p-4">
