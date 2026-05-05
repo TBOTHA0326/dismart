@@ -1,5 +1,5 @@
 import {
-  Apple, Baby, Bath, Beef, BookOpen, Broom, Car, Carrot, ChefHat,
+  Apple, Baby, Bath, Beef, BookOpen, Brush, Car, Carrot, ChefHat,
   Coffee, Cookie, Cpu, Dumbbell, Fish, Flower2, Gamepad2, Gift,
   GlassWater, Globe, Ham, HeartPulse, Home, Lamp, Layers,
   Leaf, Milk, Music, Paintbrush, Pencil, Pill, Plug, Scissors,
@@ -9,7 +9,7 @@ import {
 } from "lucide-react";
 
 const icons: Record<string, LucideIcon> = {
-  Apple, Baby, Bath, Beef, BookOpen, Broom, Car, Carrot, ChefHat,
+  Apple, Baby, Bath, Beef, BookOpen, Brush, Car, Carrot, ChefHat,
   Coffee, Cookie, Cpu, Dumbbell, Fish, Flower2, Gamepad2, Gift,
   GlassWater, Globe, Ham, HeartPulse, Home, Lamp, Layers,
   Leaf, Milk, Music, Paintbrush, Pencil, Pill, Plug, Scissors,

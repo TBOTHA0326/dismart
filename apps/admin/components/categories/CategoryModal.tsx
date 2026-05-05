@@ -6,7 +6,7 @@ import FormField from "@/components/FormField";
 import { createBrowserSupabaseClient } from "@/lib/supabase";
 import type { Category } from "@dismart/shared";
 import {
-  Apple, Baby, Bath, Beef, BookOpen, Broom, Car, Carrot, ChefHat,
+  Apple, Baby, Bath, Beef, BookOpen, Brush, Car, Carrot, ChefHat,
   Coffee, Cookie, Cpu, Dumbbell, Fish, Flower2, Gamepad2, Gift,
   GlassWater, Globe, Ham, HeartPulse, Home, Lamp, Layers,
   Leaf, Milk, Music, Paintbrush, Pencil, Pill, Plug, Scissors,
@@ -18,7 +18,7 @@ import {
 const input = "w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-2.5 text-base md:text-sm text-gray-900 placeholder-gray-300 outline-none transition focus:border-brand-navy focus:bg-white focus:ring-2 focus:ring-brand-navy/10";
 
 const ICONS: Record<string, LucideIcon> = {
-  Apple, Baby, Bath, Beef, BookOpen, Broom, Car, Carrot, ChefHat,
+  Apple, Baby, Bath, Beef, BookOpen, Brush, Car, Carrot, ChefHat,
   Coffee, Cookie, Cpu, Dumbbell, Fish, Flower2, Gamepad2, Gift,
   GlassWater, Globe, Ham, HeartPulse, Home, Lamp, Layers,
   Leaf, Milk, Music, Paintbrush, Pencil, Pill, Plug, Scissors,
@@ -28,7 +28,7 @@ const ICONS: Record<string, LucideIcon> = {
 
 const ICON_LABELS: Record<string, string> = {
   Apple: "Fruit", Baby: "Baby", Bath: "Bath", Beef: "Meat", BookOpen: "Books",
-  Broom: "Cleaning", Car: "Auto", Carrot: "Vegetables", ChefHat: "Cooking",
+  Brush: "Cleaning", Car: "Auto", Carrot: "Vegetables", ChefHat: "Cooking",
   Coffee: "Coffee", Cookie: "Biscuits", Cpu: "Electronics", Dumbbell: "Fitness",
   Fish: "Fish", Flower2: "Garden", Gamepad2: "Gaming", Gift: "Gifts",
   GlassWater: "Drinks", Globe: "General", Ham: "Deli", HeartPulse: "Health",
