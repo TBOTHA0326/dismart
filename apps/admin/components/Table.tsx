@@ -33,7 +33,7 @@ export function Table({
     if (allSelected) {
       setSelected((prev) => { const next = new Set(prev); filteredIds.forEach((id) => next.delete(id)); return next; });
     } else {
-      setSelected((prev) => new Set([...prev, ...filteredIds]));
+      setSelected((prev) => new Set(Array.from(prev).concat(filteredIds)));
     }
   }
 
