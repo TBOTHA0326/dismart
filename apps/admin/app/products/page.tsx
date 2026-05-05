@@ -1,40 +1,30 @@
-import { Plus } from "lucide-react";
-import { formatCurrency } from "@dismart/shared";
-import AdminShell from "@/components/AdminShell";
-import PageHeader from "@/components/PageHeader";
-import { Table } from "@/components/Table";
-import { branches, categories, products } from "@/lib/data";
+import { getProfile } from "@/lib/auth";
+import { createSupabaseServerClient } from "@/lib/supabase-server";
+import { redirect } from "next/navigation";
+import ProductsClient from "./ProductsClient";
 
-export default function ProductsPage() {
+export default async function ProductsPage() {
+  const profile = await getProfile();
+  if (!profile) redirect("/login");
+
+  const supabase = createSupabaseServerClient();
+  const [{ data: products }, { data: categories }, { data: branches }] = await Promise.all([
+    supabase.from("products").select("*, product_branches(branch_id)"),
+    supabase.from("categories").select("*").order("sort_order"),
+    supabase.from("branches").select("*").eq("is_active", true),
+  ]);
+
+  const normalised = (products ?? []).map((p: any) => ({
+    ...p,
+    branch_ids: (p.product_branches ?? []).map((pb: any) => pb.branch_id),
+  }));
+
   return (
-    <AdminShell>
-      <PageHeader
-        title="Products"
-        description="Create and maintain products with branch assignment, stock status, specials and expiry dates."
-        action={
-          <button className="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg bg-brand-red px-4 text-sm font-bold text-white">
-            <Plus className="h-4 w-4" aria-hidden="true" />
-            New Product
-          </button>
-        }
-      />
-      <Table
-        headers={["Product", "Category", "Price", "Branches", "Stock", "Special"]}
-        rows={products.map((product) => [
-          <div key="product">
-            <p className="font-bold text-brand-navy">{product.name}</p>
-            <p className="text-xs text-gray-500">{product.description}</p>
-          </div>,
-          categories.find((category) => category.id === product.category_id)?.name ?? "Unassigned",
-          formatCurrency(product.price),
-          product.branch_ids
-            .map((id) => branches.find((branch) => branch.id === id)?.name)
-            .filter(Boolean)
-            .join(", "),
-          product.stock_status.replaceAll("_", " "),
-          product.is_special ? "Yes" : "No",
-        ])}
-      />
-    </AdminShell>
+    <ProductsClient
+      profile={profile}
+      initialProducts={normalised}
+      categories={categories ?? []}
+      branches={branches ?? []}
+    />
   );
 }

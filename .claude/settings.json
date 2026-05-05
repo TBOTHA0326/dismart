@@ -26,7 +26,20 @@
       "Bash(npm --version)",
       "Bash(pnpm build *)",
       "Bash(ipconfig)",
-      "Bash(findstr /i \"IPv4\")"
+      "Bash(findstr /i \"IPv4\")",
+      "Bash(grep -E \"\\\\.sql$|^\\\\./\")",
+      "Bash(Get-ChildItem -Path \"c:\\\\Personal Projects\\\\Tiaan\\\\dismart\\\\apps\\\\admin\" -Recurse -Force)",
+      "Bash(Select-Object FullName, PSIsContainer)",
+      "Bash(npm install *)",
+      "Bash(pnpm add *)",
+      "Bash(pnpm --filter admin build)",
+      "Bash(Get-ChildItem -Path \"c:\\\\Personal Projects\\\\Tiaan\\\\dismart\" -Recurse -Directory)",
+      "Bash(Select-Object -ExpandProperty FullName)",
+      "Bash(Sort-Object)",
+      "Bash(grep -E \"\\\\.\\(json|yml|yaml|md\\)$\")",
+      "Bash(ls apps/web/.env*)",
+      "Bash(cat apps/web/.env.local)",
+      "Bash(pnpm --filter web build)"
     ],
     "additionalDirectories": [
       "c:\\Personal Projects\\Tiaan\\dismart\\apps\\web\\app\\category",

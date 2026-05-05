@@ -28,6 +28,8 @@ export interface Product {
   expiry_date: string | null;
   is_special: boolean;
   stock_status: "in_stock" | "low_stock" | "out_of_stock";
+  stock_quantity: number;
+  reserved_quantity: number;
   created_at: string;
   branch_ids: string[];
 }
@@ -73,4 +75,27 @@ export interface Enquiry {
   branch_id: string;
   created_at: string;
   source: "whatsapp" | "web";
+}
+
+export type ReservationStatus =
+  | "PENDING"
+  | "CONTACTED"
+  | "CONFIRMED"
+  | "COLLECTED"
+  | "EXPIRED"
+  | "CANCELLED"
+  | "NOT_COLLECTED";
+
+export interface Reservation {
+  id: string;
+  product_id: string;
+  branch_id: string;
+  quantity: number;
+  total_price: number;
+  customer_name: string;
+  whatsapp_number: string;
+  status: ReservationStatus;
+  expires_at: string;
+  created_at: string;
+  updated_at: string;
 }

@@ -15,6 +15,16 @@ const config: Config = {
           "yellow-dark": "#E6BC00",
         },
       },
+      keyframes: {
+        "progress-bar": {
+          "0%": { transform: "translateX(-100%)" },
+          "60%": { transform: "translateX(-10%)" },
+          "100%": { transform: "translateX(0%)" },
+        },
+      },
+      animation: {
+        "progress-bar": "progress-bar 1.5s ease-out forwards",
+      },
     },
   },
   plugins: [],

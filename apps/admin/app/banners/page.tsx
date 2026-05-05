@@ -1,35 +1,27 @@
-import { Plus } from "lucide-react";
-import AdminShell from "@/components/AdminShell";
-import PageHeader from "@/components/PageHeader";
-import { Table } from "@/components/Table";
-import { banners, branches } from "@/lib/data";
+import { getProfile } from "@/lib/auth";
+import { createSupabaseServerClient } from "@/lib/supabase-server";
+import { redirect } from "next/navigation";
+import BannersClient from "./BannersClient";
 
-export default function BannersPage() {
+export default async function BannersPage() {
+  const profile = await getProfile();
+  if (!profile) redirect("/login");
+
+  const supabase = createSupabaseServerClient();
+  const [{ data: banners }, { data: branches }, { data: categories }, { data: products }] = await Promise.all([
+    supabase.from("banners").select("*").order("sort_order"),
+    supabase.from("branches").select("*").eq("is_active", true),
+    supabase.from("categories").select("id, name").order("sort_order"),
+    supabase.from("products").select("id, name"),
+  ]);
+
   return (
-    <AdminShell>
-      <PageHeader
-        title="Banners"
-        description="Control branch-specific promotional cards shown on the public home page."
-        action={
-          <button className="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg bg-brand-red px-4 text-sm font-bold text-white">
-            <Plus className="h-4 w-4" aria-hidden="true" />
-            New Banner
-          </button>
-        }
-      />
-      <Table
-        headers={["Headline", "Branch", "Link", "Status", "Order"]}
-        rows={banners.map((banner) => [
-          <div key="headline">
-            <p className="font-bold text-brand-navy">{banner.headline}</p>
-            <p className="text-xs text-gray-500">{banner.subtext}</p>
-          </div>,
-          branches.find((branch) => branch.id === banner.branch_id)?.name ?? "Unknown",
-          banner.link_type,
-          banner.is_active ? "Active" : "Paused",
-          banner.sort_order,
-        ])}
-      />
-    </AdminShell>
+    <BannersClient
+      profile={profile}
+      initialBanners={banners ?? []}
+      branches={branches ?? []}
+      categories={categories ?? []}
+      products={products ?? []}
+    />
   );
 }
