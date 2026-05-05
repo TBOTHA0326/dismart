@@ -91,8 +91,9 @@ export default function Header({
             <input
               value={searchValue}
               onChange={(e) => onSearchChange(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && (e.target as HTMLInputElement).blur()}
               placeholder="Search products, categories or specials"
-              className="h-11 w-full rounded-lg border border-white/70 bg-white pl-10 pr-4 text-sm font-medium text-brand-navy outline-none transition focus:border-brand-red focus:ring-2 focus:ring-brand-red/20"
+              className="h-11 w-full rounded-lg border border-white/70 bg-white pl-10 pr-4 text-base sm:text-sm font-medium text-brand-navy outline-none transition focus:border-brand-red focus:ring-2 focus:ring-brand-red/20"
               type="search"
             />
           </label>
