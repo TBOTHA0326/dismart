@@ -6,7 +6,7 @@ import FormField from "@/components/FormField";
 import { createBrowserSupabaseClient } from "@/lib/supabase";
 import type { Branch } from "@dismart/shared";
 
-const input = "w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-2.5 text-sm text-gray-900 placeholder-gray-300 outline-none transition focus:border-brand-navy focus:bg-white focus:ring-2 focus:ring-brand-navy/10";
+const input = "w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-2.5 text-base md:text-sm text-gray-900 placeholder-gray-300 outline-none transition focus:border-brand-navy focus:bg-white focus:ring-2 focus:ring-brand-navy/10";
 
 interface Props {
   open: boolean;

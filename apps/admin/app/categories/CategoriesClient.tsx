@@ -29,6 +29,12 @@ export default function CategoriesClient({ profile, initialCategories }: Props) 
     setCategories((prev) => prev.filter((c) => c.id !== id));
   }
 
+  async function handleDeleteSelected(ids: string[]) {
+    const supabase = createBrowserSupabaseClient();
+    await supabase?.from("categories").delete().in("id", ids);
+    setCategories((prev) => prev.filter((c) => !ids.includes(c.id)));
+  }
+
   async function move(index: number, direction: -1 | 1) {
     const next = [...categories];
     const target = index + direction;
@@ -66,6 +72,8 @@ export default function CategoriesClient({ profile, initialCategories }: Props) 
       <Table
         headers={["Name", "Icon", "Order", "Reorder", ""]}
         searchable={categories.map((c) => c.name)}
+        rowIds={categories.map((c) => c.id)}
+        onDeleteSelected={handleDeleteSelected}
         rows={categories.map((cat, index) => [
           <span key="name" className="font-bold text-brand-navy">{cat.name}</span>,
           <code key="icon" className="rounded bg-gray-100 px-2 py-0.5 text-xs text-gray-600">{cat.icon_name}</code>,

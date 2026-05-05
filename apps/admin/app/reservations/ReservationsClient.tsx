@@ -97,7 +97,7 @@ export default function ReservationsClient({ profile, initialReservations, branc
             className="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg border border-gray-200 bg-white px-4 text-sm font-bold text-brand-navy transition hover:border-brand-yellow active:scale-[0.98]"
           >
             <RefreshCw className="h-4 w-4" aria-hidden="true" />
-            Process Expired
+            Process Expired Reservations
           </button>
         }
       />

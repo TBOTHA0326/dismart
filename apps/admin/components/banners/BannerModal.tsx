@@ -7,7 +7,7 @@ import ImageUpload from "@/components/ImageUpload";
 import { createBrowserSupabaseClient } from "@/lib/supabase";
 import type { Banner, Branch, Category, Product } from "@dismart/shared";
 
-const input = "w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-2.5 text-sm text-gray-900 placeholder-gray-300 outline-none transition focus:border-brand-navy focus:bg-white focus:ring-2 focus:ring-brand-navy/10";
+const input = "w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-2.5 text-base md:text-sm text-gray-900 placeholder-gray-300 outline-none transition focus:border-brand-navy focus:bg-white focus:ring-2 focus:ring-brand-navy/10";
 const select = `${input} cursor-pointer`;
 
 interface Props {
@@ -18,9 +18,10 @@ interface Props {
   categories: Category[];
   products: Product[];
   banner?: Banner;
+  nextSortOrder?: number;
 }
 
-export default function BannerModal({ open, onClose, onSaved, branches, categories, products, banner }: Props) {
+export default function BannerModal({ open, onClose, onSaved, branches, categories, products, banner, nextSortOrder = 1 }: Props) {
   const editing = !!banner;
   const [form, setForm] = useState({
     branch_id: banner?.branch_id ?? "",
@@ -30,7 +31,7 @@ export default function BannerModal({ open, onClose, onSaved, branches, categori
     link_type: banner?.link_type ?? "none" as Banner["link_type"],
     link_id: banner?.link_id ?? "",
     is_active: banner?.is_active ?? true,
-    sort_order: String(banner?.sort_order ?? 1),
+    sort_order: String(banner?.sort_order ?? nextSortOrder),
   });
   const [error, setError] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
@@ -45,7 +46,7 @@ export default function BannerModal({ open, onClose, onSaved, branches, categori
       link_type: banner?.link_type ?? "none" as Banner["link_type"],
       link_id: banner?.link_id ?? "",
       is_active: banner?.is_active ?? true,
-      sort_order: String(banner?.sort_order ?? 1),
+      sort_order: String(banner?.sort_order ?? nextSortOrder),
     });
     setError(null);
   }, [open, banner]);
@@ -122,9 +123,6 @@ export default function BannerModal({ open, onClose, onSaved, branches, categori
           )}
         </div>
 
-        <FormField label="Sort order" htmlFor="ban-order">
-          <input id="ban-order" type="number" min="1" className={input} required value={form.sort_order} onChange={(e) => set("sort_order", e.target.value)} />
-        </FormField>
 
         <label className="flex items-center gap-3 cursor-pointer select-none">
           <div role="checkbox" aria-checked={form.is_active} onClick={() => set("is_active", !form.is_active)}

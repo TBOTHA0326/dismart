@@ -6,13 +6,11 @@ import UsersClient from "./UsersClient";
 export default async function UsersPage() {
   const profile = await getProfile();
   if (!profile) redirect("/login");
+  if (profile.role !== "super_admin") redirect("/");
 
   const supabase = createSupabaseServerClient();
 
-  const isAdmin = profile.role === "super_admin" || profile.role === "admin";
-
   const query = supabase.from("profiles").select("*, branches(name)");
-  if (!isAdmin) query.eq("branch_id", profile.branch_id);
 
   const [{ data: profiles }, { data: branches }] = await Promise.all([
     query,

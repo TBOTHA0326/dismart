@@ -125,7 +125,7 @@ export default function ImageUpload({ bucket, folder, value, onChange, label = "
               value={urlInput}
               onChange={(e) => setUrlInput(e.target.value)}
               placeholder="https://scontent.facebook.com/..."
-              className="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-2.5 text-sm text-gray-900 placeholder-gray-300 outline-none transition focus:border-brand-navy focus:bg-white focus:ring-2 focus:ring-brand-navy/10"
+              className="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-2.5 text-base md:text-sm text-gray-900 placeholder-gray-300 outline-none transition focus:border-brand-navy focus:bg-white focus:ring-2 focus:ring-brand-navy/10"
             />
             <button
               type="button"

@@ -45,7 +45,7 @@ export async function POST(request: Request) {
 
 export async function PATCH(request: Request) {
   const caller = await getProfile();
-  if (!caller || (caller.role !== "super_admin" && caller.role !== "admin")) {
+  if (!caller || caller.role !== "super_admin") {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
 
@@ -54,11 +54,6 @@ export async function PATCH(request: Request) {
 
   if (!id || !full_name || !role) {
     return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
-  }
-
-  // Admins cannot elevate anyone to super_admin
-  if (caller.role === "admin" && role === "super_admin") {
-    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
 
   const admin = createAdminClient();

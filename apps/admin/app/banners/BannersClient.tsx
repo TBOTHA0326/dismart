@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Pencil, Plus, Trash2 } from "lucide-react";
+import { ArrowDown, ArrowUp, Pencil, Plus, Trash2 } from "lucide-react";
 import AdminShell from "@/components/AdminShell";
 import PageHeader from "@/components/PageHeader";
 import { Table } from "@/components/Table";
@@ -25,11 +25,30 @@ export default function BannersClient({ profile, initialBanners, branches, categ
   function openNew() { setEditing(undefined); setModalOpen(true); }
   function openEdit(b: Banner) { setEditing(b); setModalOpen(true); }
 
+  async function move(index: number, direction: -1 | 1) {
+    const next = [...banners];
+    const target = index + direction;
+    if (target < 0 || target >= next.length) return;
+    [next[index], next[target]] = [next[target], next[index]];
+    const reordered = next.map((b, i) => ({ ...b, sort_order: i + 1 }));
+    setBanners(reordered);
+    const supabase = createBrowserSupabaseClient();
+    await Promise.all(
+      reordered.map((b) => supabase?.from("banners").update({ sort_order: b.sort_order }).eq("id", b.id))
+    );
+  }
+
   async function handleDelete(id: string) {
     if (!confirm("Delete this banner?")) return;
     const supabase = createBrowserSupabaseClient();
     await supabase?.from("banners").delete().eq("id", id);
     setBanners((prev) => prev.filter((b) => b.id !== id));
+  }
+
+  async function handleDeleteSelected(ids: string[]) {
+    const supabase = createBrowserSupabaseClient();
+    await supabase?.from("banners").delete().in("id", ids);
+    setBanners((prev) => prev.filter((b) => !ids.includes(b.id)));
   }
 
   async function handleSaved() {
@@ -38,6 +57,8 @@ export default function BannersClient({ profile, initialBanners, branches, categ
     if (data) setBanners(data);
     setModalOpen(false);
   }
+
+  const nextSortOrder = banners.length > 0 ? Math.max(...banners.map((b) => b.sort_order)) + 1 : 1;
 
   return (
     <AdminShell role={profile.role}>
@@ -53,9 +74,11 @@ export default function BannersClient({ profile, initialBanners, branches, categ
       />
 
       <Table
-        headers={["Headline", "Branch", "Link", "Status", "Order", ""]}
+        headers={["Headline", "Branch", "Link", "Status", "Reorder", ""]}
         searchable={banners.map((b) => b.headline)}
-        rows={banners.map((banner) => [
+        rowIds={banners.map((b) => b.id)}
+        onDeleteSelected={handleDeleteSelected}
+        rows={banners.map((banner, index) => [
           <div key="headline">
             <p className="font-bold text-brand-navy">{banner.headline}</p>
             {banner.subtext && <p className="text-xs text-gray-500">{banner.subtext}</p>}
@@ -65,7 +88,16 @@ export default function BannersClient({ profile, initialBanners, branches, categ
           <span key="status" className={`inline-flex rounded-full px-2 py-0.5 text-xs font-bold ${banner.is_active ? "bg-green-50 text-green-700" : "bg-gray-100 text-gray-400"}`}>
             {banner.is_active ? "Active" : "Paused"}
           </span>,
-          banner.sort_order,
+          <div key="reorder" className="flex items-center gap-1">
+            <button onClick={() => move(index, -1)} disabled={index === 0}
+              className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-gray-200 text-gray-400 hover:border-brand-navy hover:text-brand-navy transition disabled:opacity-30 disabled:cursor-not-allowed" aria-label="Move up">
+              <ArrowUp className="h-3.5 w-3.5" />
+            </button>
+            <button onClick={() => move(index, 1)} disabled={index === banners.length - 1}
+              className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-gray-200 text-gray-400 hover:border-brand-navy hover:text-brand-navy transition disabled:opacity-30 disabled:cursor-not-allowed" aria-label="Move down">
+              <ArrowDown className="h-3.5 w-3.5" />
+            </button>
+          </div>,
           <div key="actions" className="flex items-center gap-2">
             <button onClick={() => openEdit(banner)} className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-gray-200 text-gray-400 hover:border-brand-navy hover:text-brand-navy transition" aria-label="Edit">
               <Pencil className="h-3.5 w-3.5" />
@@ -77,7 +109,7 @@ export default function BannersClient({ profile, initialBanners, branches, categ
         ])}
       />
 
-      <BannerModal open={modalOpen} onClose={() => setModalOpen(false)} onSaved={handleSaved} branches={branches as Branch[]} categories={categories as Category[]} products={products as Product[]} banner={editing} />
+      <BannerModal open={modalOpen} onClose={() => setModalOpen(false)} onSaved={handleSaved} branches={branches as Branch[]} categories={categories as Category[]} products={products as Product[]} banner={editing} nextSortOrder={nextSortOrder} />
     </AdminShell>
   );
 }

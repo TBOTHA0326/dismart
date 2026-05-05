@@ -26,9 +26,8 @@ export default function UsersClient({ profile, initialProfiles, branches }: Prop
   const [editing, setEditing] = useState<Profile | undefined>();
 
   const isSuperAdmin = profile.role === "super_admin";
-  const isAdmin = profile.role === "admin" || isSuperAdmin;
   const canCreate = isSuperAdmin;
-  const canEdit = isAdmin;
+  const canEdit = isSuperAdmin;
 
   function openNew() { setEditing(undefined); setModalOpen(true); }
   function openEdit(p: Profile) { setEditing(p); setModalOpen(true); }

@@ -26,8 +26,8 @@ const allNavItems = [
   { href: "/categories", label: "Categories", icon: Tags, roles: ["super_admin", "admin", "branch_manager"] },
   { href: "/banners", label: "Banners", icon: BadgePercent, roles: ["super_admin", "admin", "branch_manager"] },
   { href: "/deals", label: "Deals", icon: FileText, roles: ["super_admin", "admin", "branch_manager"] },
-  { href: "/branches", label: "Branches", icon: Building2, roles: ["super_admin", "admin"] },
-  { href: "/users", label: "Users", icon: Users, roles: ["super_admin", "admin"] },
+  { href: "/branches", label: "Branches", icon: Building2, roles: ["super_admin"] },
+  { href: "/users", label: "Users", icon: Users, roles: ["super_admin"] },
 ];
 
 interface Props {

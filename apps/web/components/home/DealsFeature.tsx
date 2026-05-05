@@ -33,6 +33,7 @@ export default function DealsFeature({ deals }: DealsFeatureProps) {
             href={featured.asset_url}
             target="_blank"
             rel="noopener noreferrer"
+            {...(isPdf ? { download: featured.title } : {})}
             className="inline-flex min-h-11 w-fit items-center justify-center gap-2 rounded-lg bg-brand-yellow px-4 text-sm font-black text-brand-navy transition hover:bg-brand-yellow-dark"
           >
             {isPdf ? (
@@ -40,7 +41,7 @@ export default function DealsFeature({ deals }: DealsFeatureProps) {
             ) : (
               <ExternalLink className="h-4 w-4" aria-hidden="true" />
             )}
-            {isPdf ? "Open Pamphlet" : "View Deals"}
+            {isPdf ? "Download Pamphlet" : "View Deals"}
           </a>
         </div>
         <a

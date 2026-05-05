@@ -32,6 +32,12 @@ export default function ProductsClient({ profile, initialProducts, categories, b
     setProducts((prev) => prev.filter((p) => p.id !== id));
   }
 
+  async function handleDeleteSelected(ids: string[]) {
+    const supabase = createBrowserSupabaseClient();
+    await supabase?.from("products").delete().in("id", ids);
+    setProducts((prev) => prev.filter((p) => !ids.includes(p.id)));
+  }
+
   async function handleSaved() {
     const supabase = createBrowserSupabaseClient();
     const { data } = await supabase!
@@ -60,6 +66,8 @@ export default function ProductsClient({ profile, initialProducts, categories, b
       <Table
         headers={["Product", "Category", "Price", "Branches", "Stock", "Reserved", "Special", ""]}
         searchable={products.map((p) => p.name)}
+        rowIds={products.map((p) => p.id)}
+        onDeleteSelected={handleDeleteSelected}
         rows={products.map((product) => [
           <div key="product">
             <p className="font-bold text-brand-navy">{product.name}</p>

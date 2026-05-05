@@ -1,37 +1,23 @@
 import {
-  Baby,
-  Bath,
-  Coffee,
-  Cookie,
-  Gamepad2,
-  HeartPulse,
-  Home,
-  Pencil,
-  Plug,
-  Shirt,
-  ShoppingBasket,
-  Smartphone,
-  Sparkles,
-  Wrench,
+  Apple, Baby, Bath, Beef, BookOpen, Broom, Car, Carrot, ChefHat,
+  Coffee, Cookie, Cpu, Dumbbell, Fish, Flower2, Gamepad2, Gift,
+  GlassWater, Globe, Ham, HeartPulse, Home, Lamp, Layers,
+  Leaf, Milk, Music, Paintbrush, Pencil, Pill, Plug, Scissors,
+  Shirt, ShoppingBasket, Smartphone, Snowflake, Sofa, Sparkles,
+  Star, Sun, Tv, UtensilsCrossed, Waves, Wine, Wrench, Zap,
   type LucideIcon,
 } from "lucide-react";
 
 const icons: Record<string, LucideIcon> = {
-  Baby,
-  Bath,
-  Coffee,
-  Cookie,
-  Gamepad2,
-  HeartPulse,
-  Home,
-  Pencil,
-  Plug,
-  Shirt,
-  ShoppingBasket,
-  Smartphone,
-  Sparkles,
-  Wrench,
+  Apple, Baby, Bath, Beef, BookOpen, Broom, Car, Carrot, ChefHat,
+  Coffee, Cookie, Cpu, Dumbbell, Fish, Flower2, Gamepad2, Gift,
+  GlassWater, Globe, Ham, HeartPulse, Home, Lamp, Layers,
+  Leaf, Milk, Music, Paintbrush, Pencil, Pill, Plug, Scissors,
+  Shirt, ShoppingBasket, Smartphone, Snowflake, Sofa, Sparkles,
+  Star, Sun, Tv, UtensilsCrossed, Waves, Wine, Wrench, Zap,
 };
+
+export const CATEGORY_ICONS = Object.keys(icons);
 
 interface CategoryIconProps {
   name: string;

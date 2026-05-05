@@ -10,6 +10,11 @@ export const metadata: Metadata = {
     "Find incredible deals on groceries, household, electronics and more at your nearest Dismart branch.",
 };
 
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+};
+
 export default function RootLayout({
   children,
 }: {
