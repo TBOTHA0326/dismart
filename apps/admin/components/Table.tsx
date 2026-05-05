@@ -45,7 +45,7 @@ export function Table({
     if (!onDeleteSelected || selected.size === 0) return;
     if (!confirm(`Delete ${selected.size} item${selected.size > 1 ? "s" : ""}?`)) return;
     setDeleting(true);
-    await onDeleteSelected([...selected]);
+    await onDeleteSelected(Array.from(selected));
     setSelected(new Set());
     setDeleting(false);
   }
