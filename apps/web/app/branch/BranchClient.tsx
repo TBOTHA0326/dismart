@@ -72,7 +72,7 @@ export default function BranchClient({ branches, categories }: Props) {
 
               {/* Mobile/tablet: horizontal category filter pills */}
               {!loading && categoriesWithProducts.length > 0 && (
-                <div className="md:hidden mb-4 -mx-4 px-4 overflow-x-auto scroll-smooth">
+                <div className="md:hidden mb-4 -mx-4 px-4 overflow-x-auto scrollbar-hide scroll-smooth">
                   <div className="flex gap-2 w-max pb-2">
                     <button
                       onClick={() => setActiveCategoryId(null)}

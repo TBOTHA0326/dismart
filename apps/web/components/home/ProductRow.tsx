@@ -53,10 +53,11 @@ export default function ProductRow({ title, products, branch, viewAllHref }: Pro
           ref={scrollerRef}
           onWheel={(event) => {
             if (Math.abs(event.deltaY) > Math.abs(event.deltaX)) {
+              event.preventDefault();
               event.currentTarget.scrollLeft += event.deltaY;
             }
           }}
-          className="flex flex-1 snap-x snap-mandatory gap-4 overflow-x-auto pb-4 scroll-smooth"
+          className="flex flex-1 snap-x snap-mandatory gap-4 overflow-x-auto scrollbar-hide pb-4 scroll-smooth"
         >
           {products.map((product) => (
             <div key={product.id} className="w-44 flex-shrink-0 snap-start sm:w-52">

@@ -36,10 +36,11 @@ export default function CategoryStrip({ categories }: CategoryStripProps) {
             ref={scrollerRef}
             onWheel={(event) => {
               if (Math.abs(event.deltaY) > Math.abs(event.deltaX)) {
+                event.preventDefault();
                 event.currentTarget.scrollLeft += event.deltaY;
               }
             }}
-            className="flex-1 overflow-x-auto pb-2 scroll-smooth"
+            className="flex-1 overflow-x-auto scrollbar-hide pb-2 scroll-smooth"
           >
             <div className="mx-auto flex w-max min-w-full justify-start gap-4 md:justify-center md:gap-5">
               {categories.map((cat) => (
