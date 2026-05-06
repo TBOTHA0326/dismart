@@ -15,9 +15,10 @@ interface Props {
   branches: Branch[];
   categories: Pick<Category, "id" | "name">[];
   products: Pick<Product, "id" | "name">[];
+  activeBranchId: string | null;
 }
 
-export default function BannersClient({ profile, initialBanners, branches, categories, products }: Props) {
+export default function BannersClient({ profile, initialBanners, branches, categories, products, activeBranchId }: Props) {
   const [banners, setBanners] = useState(initialBanners);
   const [modalOpen, setModalOpen] = useState(false);
   const [editing, setEditing] = useState<Banner | undefined>();
@@ -61,7 +62,7 @@ export default function BannersClient({ profile, initialBanners, branches, categ
   const nextSortOrder = banners.length > 0 ? Math.max(...banners.map((b) => b.sort_order)) + 1 : 1;
 
   return (
-    <AdminShell role={profile.role}>
+    <AdminShell role={profile.role} branches={branches} activeBranchId={activeBranchId}>
       <PageHeader
         title="Banners"
         description="Control branch-specific promotional cards shown on the public home page."
