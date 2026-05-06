@@ -1,7 +1,7 @@
 "use client";
 
-import { useMemo, useState } from "react";
-import { MessageCircle, RefreshCw } from "lucide-react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { MessageCircle, RefreshCw, Wifi, WifiOff } from "lucide-react";
 import {
   formatCurrency,
   getReservationStatusLabel,
@@ -12,6 +12,8 @@ import {
 import AdminShell from "@/components/AdminShell";
 import PageHeader from "@/components/PageHeader";
 import { Table } from "@/components/Table";
+import { createBrowserSupabaseClient } from "@/lib/supabase";
+import type { RealtimeChannel } from "@supabase/supabase-js";
 
 type ReservationRow = Reservation & {
   products?: { name: string; price: number } | null;
@@ -22,14 +24,54 @@ interface Props {
   profile: Profile;
   initialReservations: ReservationRow[];
   branches: { id: string; name: string; whatsapp_number: string }[];
+  activeBranchId: string | null;
 }
 
 const actionStatuses: ReservationStatus[] = ["CONTACTED", "CONFIRMED", "COLLECTED", "NOT_COLLECTED", "CANCELLED"];
 
-export default function ReservationsClient({ profile, initialReservations, branches }: Props) {
+export default function ReservationsClient({ profile, initialReservations, branches, activeBranchId }: Props) {
   const [reservations, setReservations] = useState(initialReservations);
   const [updatingId, setUpdatingId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [connected, setConnected] = useState(false);
+  const channelRef = useRef<RealtimeChannel | null>(null);
+
+  useEffect(() => {
+    const supabase = createBrowserSupabaseClient();
+    if (!supabase) return;
+
+    const channel = supabase
+      .channel("reservations-realtime")
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "reservations" },
+        (payload) => {
+          if (payload.eventType === "INSERT") {
+            // New reservation: fetch with joined product/branch data then prepend
+            supabase
+              .from("reservations")
+              .select("*, products(name, price), branches(name, whatsapp_number)")
+              .eq("id", payload.new.id)
+              .single()
+              .then(({ data }) => {
+                if (data) setReservations((prev) => [data as ReservationRow, ...prev]);
+              });
+          } else if (payload.eventType === "UPDATE") {
+            setReservations((prev) =>
+              prev.map((r) => r.id === payload.new.id ? { ...r, ...payload.new } : r)
+            );
+          } else if (payload.eventType === "DELETE") {
+            setReservations((prev) => prev.filter((r) => r.id !== payload.old.id));
+          }
+        }
+      )
+      .subscribe((status) => {
+        setConnected(status === "SUBSCRIBED");
+      });
+
+    channelRef.current = channel;
+    return () => { supabase.removeChannel(channel); };
+  }, []);
 
   const searchIndex = useMemo(
     () => reservations.map((reservation) => [
@@ -86,19 +128,25 @@ export default function ReservationsClient({ profile, initialReservations, branc
   }
 
   return (
-    <AdminShell role={profile.role}>
+    <AdminShell role={profile.role} branches={branches} activeBranchId={activeBranchId}>
       <PageHeader
         title="Reservations"
         description="Track customer holds, contact shoppers and release stock when reservations expire or are cancelled."
         action={
-          <button
-            type="button"
-            onClick={expireNow}
-            className="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg border border-gray-200 bg-white px-4 text-sm font-bold text-brand-navy transition hover:border-brand-yellow active:scale-[0.98]"
-          >
-            <RefreshCw className="h-4 w-4" aria-hidden="true" />
-            Process Expired Reservations
-          </button>
+          <div className="flex items-center gap-3">
+            <span className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-bold ${connected ? "bg-green-50 text-green-700" : "bg-gray-100 text-gray-500"}`}>
+              {connected ? <Wifi className="h-3 w-3" /> : <WifiOff className="h-3 w-3" />}
+              {connected ? "Live" : "Connecting…"}
+            </span>
+            <button
+              type="button"
+              onClick={expireNow}
+              className="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg border border-gray-200 bg-white px-4 text-sm font-bold text-brand-navy transition hover:border-brand-yellow active:scale-[0.98]"
+            >
+              <RefreshCw className="h-4 w-4" aria-hidden="true" />
+              Process Expired Reservations
+            </button>
+          </div>
         }
       />
 
