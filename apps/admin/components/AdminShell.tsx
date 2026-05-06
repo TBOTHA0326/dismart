@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import {
   BadgePercent,
   Boxes,
@@ -33,9 +33,16 @@ const allNavItems = [
 interface Props {
   children: React.ReactNode;
   role?: Profile["role"];
+  branches?: { id: string; name: string }[];
+  activeBranchId?: string | null;
 }
 
-export default function AdminShell({ children, role = "branch_manager" }: Props) {
+export default function AdminShell({
+  children,
+  role = "branch_manager",
+  branches = [],
+  activeBranchId,
+}: Props) {
   const router = useRouter();
   const pathname = usePathname();
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
@@ -82,6 +89,9 @@ export default function AdminShell({ children, role = "branch_manager" }: Props)
             <span className="ml-2 text-sm font-bold text-gray-400">CMS</span>
           </Link>
           <div className="flex items-center gap-2">
+            {(role === "super_admin" || role === "admin") && branches.length > 0 && (
+              <BranchSelector branches={branches} activeBranchId={activeBranchId ?? null} />
+            )}
             <button
               onClick={handleSignOut}
               className="hidden md:inline-flex items-center gap-1.5 text-sm font-semibold text-gray-500 hover:text-brand-navy transition"
@@ -177,5 +187,45 @@ export default function AdminShell({ children, role = "branch_manager" }: Props)
         <main>{children}</main>
       </div>
     </div>
+  );
+}
+
+function BranchSelector({
+  branches,
+  activeBranchId,
+}: {
+  branches: { id: string; name: string }[];
+  activeBranchId: string | null;
+}) {
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
+  function handleChange(e: React.ChangeEvent<HTMLSelectElement>) {
+    const value = e.target.value;
+    const params = new URLSearchParams(searchParams.toString());
+    if (value) {
+      params.set("branch", value);
+    } else {
+      params.delete("branch");
+    }
+    const qs = params.toString();
+    router.push(qs ? `${pathname}?${qs}` : pathname);
+  }
+
+  return (
+    <select
+      value={activeBranchId ?? ""}
+      onChange={handleChange}
+      className="h-9 cursor-pointer rounded-lg border border-gray-200 bg-white px-3 text-sm font-bold text-brand-navy outline-none transition focus:border-brand-navy focus:ring-2 focus:ring-brand-navy/10"
+      aria-label="Select branch"
+    >
+      <option value="">All Branches</option>
+      {branches.map((b) => (
+        <option key={b.id} value={b.id}>
+          {b.name}
+        </option>
+      ))}
+    </select>
   );
 }
