@@ -56,7 +56,15 @@ export default function AdminShell({
     }
   }, [pathname]);
 
+  const searchParams = useSearchParams();
+  const branchParam = searchParams.get("branch");
+
   const navItems = allNavItems.filter((item) => item.roles.includes(role));
+
+  function navHref(href: string) {
+    if (!branchParam) return href;
+    return `${href}?branch=${branchParam}`;
+  }
 
   function isActive(href: string) {
     return href === "/" ? pathname === "/" : pathname.startsWith(href);
@@ -142,7 +150,7 @@ export default function AdminShell({
             {navItems.map((item) => (
               <Link
                 key={item.href}
-                href={item.href}
+                href={navHref(item.href)}
                 onClick={handleNavClick}
                 className={`flex min-h-11 items-center gap-3 rounded-lg px-3 text-sm font-bold transition
                   ${isActive(item.href)
@@ -170,7 +178,7 @@ export default function AdminShell({
             {navItems.map((item) => (
               <Link
                 key={item.href}
-                href={item.href}
+                href={navHref(item.href)}
                 onClick={handleNavClick}
                 className={`flex min-h-11 items-center gap-3 rounded-lg px-3 text-sm font-bold transition
                   ${isActive(item.href)
