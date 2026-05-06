@@ -12,9 +12,11 @@ import type { Category, Profile } from "@dismart/shared";
 interface Props {
   profile: Profile;
   initialCategories: Category[];
+  branches: { id: string; name: string }[];
+  activeBranchId: string | null;
 }
 
-export default function CategoriesClient({ profile, initialCategories }: Props) {
+export default function CategoriesClient({ profile, initialCategories, branches, activeBranchId }: Props) {
   const [categories, setCategories] = useState(initialCategories);
   const [modalOpen, setModalOpen] = useState(false);
   const [editing, setEditing] = useState<Category | undefined>();
@@ -57,7 +59,7 @@ export default function CategoriesClient({ profile, initialCategories }: Props) 
   }
 
   return (
-    <AdminShell role={profile.role}>
+    <AdminShell role={profile.role} branches={branches} activeBranchId={activeBranchId}>
       <PageHeader
         title="Categories"
         description="Manage the public category strip, icon names and display order."
