@@ -13,9 +13,10 @@ interface Props {
   profile: Profile;
   initialDeals: DealPamphlet[];
   branches: Branch[];
+  activeBranchId: string | null;
 }
 
-export default function DealsClient({ profile, initialDeals, branches }: Props) {
+export default function DealsClient({ profile, initialDeals, branches, activeBranchId }: Props) {
   const [deals, setDeals] = useState(initialDeals);
   const [modalOpen, setModalOpen] = useState(false);
   const [editing, setEditing] = useState<DealPamphlet | undefined>();
@@ -59,7 +60,7 @@ export default function DealsClient({ profile, initialDeals, branches }: Props) 
   const nextSortOrder = deals.length > 0 ? Math.max(...deals.map((d) => d.sort_order)) + 1 : 1;
 
   return (
-    <AdminShell role={profile.role}>
+    <AdminShell role={profile.role} branches={branches} activeBranchId={activeBranchId}>
       <PageHeader
         title="Deals"
         description="Upload savings pamphlets, PDFs and images per branch."
