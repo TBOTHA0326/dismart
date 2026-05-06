@@ -2,7 +2,8 @@
   "permissions": {
     "allow": [
       "Bash(node -e \"const l = require\\('./apps/web/node_modules/lucide-react'\\); const icons = ['Apple','Baby','Bath','Beef','BookOpen','Broom','Car','Carrot','ChefHat','Coffee','Cookie','Cpu','Dumbbell','Fish','Flower2','Gamepad2','Gift','GlassWater','Globe','Ham','HeartPulse','Home','Lamp','Layers','Leaf','Milk','Music','Paintbrush','Pencil','Pill','Plug','Scissors','Shirt','ShoppingBasket','Smartphone','Snowflake','Sofa','Sparkles','Star','Sun','Tv','UtensilsCrossed','Waves','Wine','Wrench','Zap']; icons.forEach\\(i => { if \\(!l[i]\\) console.log\\('MISSING:', i\\); else console.log\\('OK:', i\\); }\\)\")",
-      "Bash(node -e \"const l = require\\('./apps/web/node_modules/lucide-react'\\); ['Brush','Toilet','Trash2','SprayCan'].forEach\\(i => console.log\\(i, !!l[i]\\)\\)\")"
+      "Bash(node -e \"const l = require\\('./apps/web/node_modules/lucide-react'\\); ['Brush','Toilet','Trash2','SprayCan'].forEach\\(i => console.log\\(i, !!l[i]\\)\\)\")",
+      "Bash(npx supabase *)"
     ]
   }
 }

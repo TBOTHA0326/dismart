@@ -17,10 +17,12 @@ interface Props {
   branches: Branch[];
   categories: Category[];
   product?: Product;
+  lockedBranchId?: string | null;
 }
 
-export default function ProductModal({ open, onClose, onSaved, branches, categories, product }: Props) {
+export default function ProductModal({ open, onClose, onSaved, branches, categories, product, lockedBranchId }: Props) {
   const editing = !!product;
+  const defaultBranchIds = lockedBranchId ? [lockedBranchId] : (product?.branch_ids ?? []);
   const [form, setForm] = useState({
     name: product?.name ?? "",
     description: product?.description ?? "",
@@ -29,9 +31,10 @@ export default function ProductModal({ open, onClose, onSaved, branches, categor
     image_url: product?.image_url ?? "",
     expiry_date: product?.expiry_date ?? "",
     is_special: product?.is_special ?? false,
+    promo_label: product?.promo_label ?? "",
     stock_status: product?.stock_status ?? "in_stock" as Product["stock_status"],
     stock_quantity: product ? String(product.stock_quantity) : "0",
-    branch_ids: product?.branch_ids ?? [] as string[],
+    branch_ids: defaultBranchIds,
   });
   const [error, setError] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
@@ -46,9 +49,10 @@ export default function ProductModal({ open, onClose, onSaved, branches, categor
       image_url: product?.image_url ?? "",
       expiry_date: product?.expiry_date ?? "",
       is_special: product?.is_special ?? false,
+      promo_label: product?.promo_label ?? "",
       stock_status: product?.stock_status ?? "in_stock" as Product["stock_status"],
       stock_quantity: product ? String(product.stock_quantity) : "0",
-      branch_ids: product?.branch_ids ?? [],
+      branch_ids: lockedBranchId ? [lockedBranchId] : (product?.branch_ids ?? []),
     });
     setError(null);
   }, [open, product]);
@@ -80,6 +84,7 @@ export default function ProductModal({ open, onClose, onSaved, branches, categor
       image_url: form.image_url || null,
       expiry_date: form.expiry_date || null,
       is_special: form.is_special,
+      promo_label: form.promo_label.trim() || null,
       stock_status: form.stock_status,
       stock_quantity: Math.max(0, parseInt(form.stock_quantity, 10) || 0),
     };
@@ -157,18 +162,30 @@ export default function ProductModal({ open, onClose, onSaved, branches, categor
           </FormField>
         </div>
 
-        <FormField label="Branches" htmlFor="p-branches">
-          <div className="flex flex-wrap gap-2 pt-1">
-            {branches.map((b) => {
-              const active = form.branch_ids.includes(b.id);
-              return (
-                <button key={b.id} type="button" onClick={() => toggleBranch(b.id)}
-                  className={`rounded-full border px-3 py-1 text-xs font-bold transition ${active ? "border-brand-navy bg-brand-navy text-white" : "border-gray-200 bg-white text-gray-500 hover:border-brand-navy hover:text-brand-navy"}`}>
-                  {b.name}
-                </button>
-              );
-            })}
-          </div>
+        <FormField label="Branch" htmlFor="p-branches">
+          {lockedBranchId ? (
+            <div className="flex flex-wrap gap-2 pt-1">
+              <span className="rounded-full border border-brand-navy bg-brand-navy px-3 py-1 text-xs font-bold text-white">
+                {branches.find((b) => b.id === lockedBranchId)?.name ?? "Your branch"}
+              </span>
+            </div>
+          ) : (
+            <div className="flex flex-wrap gap-2 pt-1">
+              {branches.map((b) => {
+                const active = form.branch_ids.includes(b.id);
+                return (
+                  <button key={b.id} type="button" onClick={() => toggleBranch(b.id)}
+                    className={`rounded-full border px-3 py-1 text-xs font-bold transition ${active ? "border-brand-navy bg-brand-navy text-white" : "border-gray-200 bg-white text-gray-500 hover:border-brand-navy hover:text-brand-navy"}`}>
+                    {b.name}
+                  </button>
+                );
+              })}
+            </div>
+          )}
+        </FormField>
+
+        <FormField label="Promo label" htmlFor="p-promo" hint='e.g. "BUY 2 FOR R219" or "Save 20%" — leave blank for none'>
+          <input id="p-promo" className={input} placeholder="BUY 2 FOR R219" value={form.promo_label} onChange={(e) => set("promo_label", e.target.value)} />
         </FormField>
 
         <label className="flex items-center gap-3 cursor-pointer select-none">

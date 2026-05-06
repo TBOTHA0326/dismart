@@ -105,6 +105,18 @@ export default function HomeClient({ branches, categories }: Props) {
       <main className="min-h-screen bg-gray-50 pb-24 md:pb-0">
         <CategoryStrip categories={categories} />
 
+        <div className="flex justify-center px-4 py-4 md:hidden">
+          <a
+            href="/branch"
+            className="inline-flex items-center gap-2 rounded-full bg-brand-navy px-8 py-3 text-sm font-bold uppercase tracking-widest text-brand-yellow shadow-md transition hover:bg-brand-yellow hover:text-brand-navy"
+          >
+            View All Products
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+            </svg>
+          </a>
+        </div>
+
         {loading && (
           <div className="flex justify-center py-12">
             <div className="h-8 w-8 animate-spin rounded-full border-4 border-brand-yellow border-t-brand-navy" />
@@ -132,20 +144,9 @@ export default function HomeClient({ branches, categories }: Props) {
         ) : !loading && (
           <>
             <DealsFeature deals={deals} />
-            <div className="flex justify-center px-4 py-4 md:hidden">
-              <a
-                href="/branch"
-                className="inline-flex items-center gap-2 rounded-full bg-brand-navy px-8 py-3 text-sm font-bold uppercase tracking-widest text-brand-yellow shadow-md transition hover:bg-brand-yellow hover:text-brand-navy"
-              >
-                View All Products
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                </svg>
-              </a>
-            </div>
             {banners[0] && <BannerCard banner={banners[0]} />}
             {branch && specials.length > 0 && (
-              <ProductRow title="Today's Specials" products={specials} branch={branch} />
+              <ProductRow title="NEW Specials" products={specials} branch={branch} />
             )}
             {banners[1] && <BannerCard banner={banners[1]} />}
             {branch && categoriesWithProducts.map(({ cat, catProducts }, index) => (

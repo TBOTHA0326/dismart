@@ -10,6 +10,8 @@ export default function DealsFeature({ deals }: DealsFeatureProps) {
 
   const featured = deals[0];
   const isPdf = featured.asset_type === "pdf";
+  const isImage = featured.asset_type === "image";
+  const displayImage = featured.thumbnail_url ?? (isImage ? featured.asset_url : null);
 
   return (
     <section className="mx-auto max-w-7xl px-4 py-5">
@@ -50,9 +52,9 @@ export default function DealsFeature({ deals }: DealsFeatureProps) {
           rel="noopener noreferrer"
           className="relative block min-h-56 bg-gray-100"
         >
-          {featured.thumbnail_url ? (
+          {displayImage ? (
             <img
-              src={featured.thumbnail_url}
+              src={displayImage}
               alt={featured.title}
               className="h-full min-h-56 w-full object-cover"
             />

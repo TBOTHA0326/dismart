@@ -41,10 +41,10 @@ export default function ProductsClient({ profile, initialProducts, categories, b
 
   async function handleSaved() {
     const supabase = createBrowserSupabaseClient();
-    const { data } = await supabase!
-      .from("products")
-      .select("*, product_branches(branch_id)")
-      .order("created_at", { ascending: false });
+    const query = activeBranchId
+      ? supabase!.from("products").select("*, product_branches!inner(branch_id)").eq("product_branches.branch_id", activeBranchId).order("created_at", { ascending: false })
+      : supabase!.from("products").select("*, product_branches(branch_id)").order("created_at", { ascending: false });
+    const { data } = await query;
     if (data) {
       setProducts(data.map((p: any) => ({ ...p, branch_ids: (p.product_branches ?? []).map((pb: any) => pb.branch_id) })));
     }
@@ -111,6 +111,7 @@ export default function ProductsClient({ profile, initialProducts, categories, b
         branches={branches}
         categories={categories}
         product={editing}
+        lockedBranchId={profile.role === "branch_manager" ? activeBranchId : null}
       />
     </AdminShell>
   );

@@ -11,7 +11,7 @@ interface Props {
   branch: Branch;
 }
 
-const inputClass = "h-11 w-full min-w-0 box-border rounded-lg border border-gray-200 bg-gray-50 px-3 text-sm text-gray-900 outline-none transition focus:border-brand-navy focus:bg-white focus:ring-2 focus:ring-brand-navy/10";
+const inputClass = "h-11 w-full min-w-0 box-border rounded-lg border border-gray-200 bg-gray-50 px-3 text-sm text-gray-900 outline-none transition focus:border-brand-navy focus:bg-white focus:ring-2 focus:ring-brand-navy/10 [appearance:none]";
 
 // Generate time slots every 30 min from 07:00 to 19:00
 const TIME_SLOTS = Array.from({ length: 25 }, (_, i) => {
@@ -190,7 +190,7 @@ export default function ReserveModal({ open, onClose, product, branch }: Props) 
 
             {/* Custom date + time picker */}
             {timeframe === "custom" && (
-              <div className="rounded-xl border border-brand-navy/20 bg-brand-navy/5 p-4 space-y-4 w-full min-w-0 overflow-hidden">
+              <div className="rounded-xl border border-brand-navy/20 bg-brand-navy/5 p-4 space-y-4 w-full min-w-0 overflow-hidden [contain:layout]">
                 {/* Date */}
                 <div className="space-y-1.5 min-w-0">
                   <label className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-widest text-brand-navy">

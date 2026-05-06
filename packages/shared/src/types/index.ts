@@ -27,6 +27,7 @@ export interface Product {
   image_url: string;
   expiry_date: string | null;
   is_special: boolean;
+  promo_label: string | null;
   stock_status: "in_stock" | "low_stock" | "out_of_stock";
   stock_quantity: number;
   reserved_quantity: number;

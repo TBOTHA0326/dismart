@@ -48,6 +48,11 @@ export default function ProductCard({ product, branch }: ProductCardProps) {
         </Link>
 
         <div className="p-3 flex flex-col gap-2 flex-1">
+          {product.promo_label && (
+            <div className="inline-flex items-center gap-1 self-start rounded-md bg-brand-red px-2 py-1 text-[11px] font-black uppercase tracking-wide text-white">
+              {product.promo_label} &rsaquo;
+            </div>
+          )}
           <Link href={`/product/${product.id}`}>
             <h3 className="text-sm font-semibold text-gray-900 line-clamp-2 leading-snug hover:text-brand-navy transition-colors">
               {product.name}
