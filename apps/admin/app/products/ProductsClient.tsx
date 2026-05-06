@@ -15,9 +15,10 @@ interface Props {
   initialProducts: Product[];
   categories: Category[];
   branches: Branch[];
+  activeBranchId: string | null;
 }
 
-export default function ProductsClient({ profile, initialProducts, categories, branches }: Props) {
+export default function ProductsClient({ profile, initialProducts, categories, branches, activeBranchId }: Props) {
   const [products, setProducts] = useState(initialProducts);
   const [modalOpen, setModalOpen] = useState(false);
   const [editing, setEditing] = useState<Product | undefined>();
@@ -51,7 +52,7 @@ export default function ProductsClient({ profile, initialProducts, categories, b
   }
 
   return (
-    <AdminShell role={profile.role}>
+    <AdminShell role={profile.role} branches={branches} activeBranchId={activeBranchId}>
       <PageHeader
         title="Products"
         description="Create and maintain products with branch assignment, exact stock, reservations, specials and expiry dates."
